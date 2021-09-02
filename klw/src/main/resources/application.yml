@@ -1,0 +1,53 @@
+server.address: 127.0.0.1
+server.port: 1883
+server:
+  servlet:
+    context-path: /test-klw
+
+spring:
+  application.name: asmkt-klw
+  cloud:
+    nacos.discovery.server-addr: 127.0.0.1:8848
+    nacos.discovery.ip: 127.0.0.1
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://47.100.68.250:1433;DatabaseName=Asmkt_klw
+    username: sa
+    password: asmkt@01
+    type: com.alibaba.druid.pool.DruidDataSource
+    maxActive: 20
+    initialSize: 5
+    maxWait: 60000
+    minIdle: 5
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: info
+
+#最大连接数
+http:
+  maxTotal: 1000
+#并发数
+  defaultMaxPerRoute: 20000
+#创建连接的最长时间
+  connectTimeout: 100000
+#从连接池中获取到连接的最长时间
+  connectionRequestTimeout: 50000
+#数据传输的最长时间
+  socketTimeout: 10000
+#提交请求前测试连接是否可用
+  staleConnectionCheckEnabled: true
+
