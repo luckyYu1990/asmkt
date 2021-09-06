@@ -9,6 +9,7 @@ public class MD5Utils {
     }
 
     public static void main(String[] args) {
+        System.out.println(getMD5Str("abc").toUpperCase());
         System.out.println(getMD5Str("abc").length());
     }
 

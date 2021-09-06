@@ -25,8 +25,8 @@ import java.util.*;
 @Slf4j
 public class AsmktPresentServiceImpl implements AsmktPresentService {
 
-    //private final String testUrl = "http://testapi.kuailiwu.com/openapiV3/api/Request";
-    private final String testUrl = "http://192.168.1.13/openapiV3/api/Request";
+    private final String testUrl = "http://testapi.kuailiwu.com/openapiV3/api/Request";
+   // private final String testUrl = "http://192.168.1.13/openapiV3/api/Request";
 
     private final String privatePkcs8 = "MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQC+ZoCVkZb6T6PZ" +
             "msHrmC5KxhXk5uPmles4aPqKe6/eDjOysk74PuSwrQMlPepdAasNYADeX6ZwfoDD" +
