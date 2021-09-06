@@ -51,7 +51,7 @@ public class HttpApiService {
             return resBuilder.build();
         } catch (Exception e) {
             log.error("error to get {}", url, e);
-            return TestResponse.error(e.getMessage());
+            return TestResponse.error(e.getCause().getMessage());
         }
     }
 

@@ -44,6 +44,7 @@ public class TestResponse implements Serializable {
 
     public static TestResponse error(String message) {
         TestResponse response = new TestResponse();
+        response.setCode(500);
         response.setMessage("error execute:" + message);
         return response;
     }
