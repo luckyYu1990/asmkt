@@ -44,13 +44,24 @@ public class ResponseAnalysisUtil {
         getRate(result, success, total);
     }
 
-    public static void analysisRedirectResponse(TestResult result) {
+    public static void analysisRedirectResponse(TestResult result, Condition condition) {
         List<TestResponse> results = result.getResults();
         result.setTotal(results.size());
         int success = 0;
         for (TestResponse res : results) {
+            boolean pass = true;
+            if (condition.isCheckCostTime()) {
+                Long costTime = condition.getExpectCostTime();
+                Long actualCost = res.getResponseCostValue();
+                if (actualCost > costTime) {
+                    pass = false;
+                }
+            }
             Integer code = res.getCode();
-            if (code == 200) {
+            if (code != 200) {
+                pass = false;
+            }
+            if (pass) {
                 success++;
             }
         }

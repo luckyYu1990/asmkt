@@ -9,6 +9,8 @@ import com.asmkt.sample.utils.MD5Utils;
 import com.asmkt.sample.utils.SignUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +37,25 @@ public class AsmktRechargeServiceImpl implements AsmktRechargeService {
             ApiParam param = ApiParam.withKeyValue(entry.getKey(), entry.getValue());
             paramList.add(param);
         }
+        return doGetTestUrl(paramList);
+    }
+
+    private TestResponse doGetTestUrl(List<ApiParam> paramList) {
+        StopWatch stopWatch = getStopWatch();
+        stopWatch.start();
         TestResponse response = apiService.doGet(AsmktRechargeConstant.USER_AUTH_TEST_URL, paramList);
-        System.out.println(response);
+        stopWatch.stop();
+        response.setResponseCost(stopWatch.getTotalTimeMillis() + " millis");
+        response.setResponseCostValue(stopWatch.getTotalTimeMillis());
+        response.setResponseCostUnit("millis");
         return response;
+    }
+
+    private StopWatch getStopWatch() {
+        String thName = Thread.currentThread().getName();
+        String watchName = "recharge " + thName;
+        System.out.println(watchName);
+        return new StopWatch(watchName);
     }
 
     private String generateSign(Map<String, String> params) {

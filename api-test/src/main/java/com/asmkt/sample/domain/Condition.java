@@ -20,6 +20,10 @@ public class Condition {
 
     private boolean checkCostTime;
 
+    public static Condition getCostTimeCondition(long expectCostTime) {
+        return Condition.builder().expectCostTime(expectCostTime).build();
+    }
+
     public boolean isCheckCostTime() {
         return expectCostTime != null;
     }
