@@ -1,6 +1,10 @@
 package com.asmkt.sample.domain;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ApiParam {
@@ -12,5 +16,14 @@ public class ApiParam {
         param.setKey(key);
         param.setValue(value);
         return param;
+    }
+
+    public static List<ApiParam> withParamJson(JSONObject paramJson) {
+        List<ApiParam> params = new ArrayList<>();
+        for (String key : paramJson.keySet()) {
+            ApiParam param = ApiParam.withKeyValue(key, paramJson.getString(key));
+            params.add(param);
+        }
+        return params;
     }
 }
