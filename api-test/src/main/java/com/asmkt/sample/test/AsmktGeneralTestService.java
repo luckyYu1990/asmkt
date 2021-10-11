@@ -34,6 +34,16 @@ public class AsmktGeneralTestService {
         return result;
     }
 
+    public TestResult testGetConcurrent(List<String> urls) {
+        final TestResult result = new TestResult();
+        List<Callable<TestResponse>> tasks = new ArrayList<>();
+        for (String url : urls) {
+            tasks.add(() -> generalService.get(url, null));
+        }
+        execute(tasks, result);
+        return result;
+    }
+
     public TestResult testPostFormConcurrent(Long thread, String url, String params) {
         final TestResult result = new TestResult();
         List<Callable<TestResponse>> tasks = new ArrayList<>();

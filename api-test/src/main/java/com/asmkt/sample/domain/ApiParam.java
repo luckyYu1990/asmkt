@@ -20,6 +20,9 @@ public class ApiParam {
 
     public static List<ApiParam> withParamJson(JSONObject paramJson) {
         List<ApiParam> params = new ArrayList<>();
+        if (paramJson == null) {
+            return params;
+        }
         for (String key : paramJson.keySet()) {
             ApiParam param = ApiParam.withKeyValue(key, paramJson.getString(key));
             params.add(param);

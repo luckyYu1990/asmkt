@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("general-test")
 public class GeneralTestController {
@@ -18,6 +20,12 @@ public class GeneralTestController {
     @PostMapping("get-url/concurrent/{thread}")
     public TestResult testConcurrentGet(@PathVariable("thread") Long thread, @RequestBody UrlAccessParam accessParam) {
         return generalTestService.testGetConcurrent(thread, accessParam.getUrl(), accessParam.getJsonParamString());
+    }
+
+    @ApiOperation("get url")
+    @PostMapping("get-url/concurrent")
+    public TestResult testConcurrentGetUrls(@RequestBody List<String> urls) {
+        return generalTestService.testGetConcurrent(urls);
     }
 
     @ApiOperation("post url")

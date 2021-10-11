@@ -57,7 +57,8 @@ public class HttpApiService {
 
     public TestResponse doGet(String url, List<ApiParam> paramList) {
         if (CollectionUtils.isEmpty(paramList)) {
-            throw new RuntimeException("Param list is empty");
+            //throw new RuntimeException("Param list is empty");
+            return doGet(url);
         }
         try {
             URIBuilder uriBuilder = new URIBuilder(url);
