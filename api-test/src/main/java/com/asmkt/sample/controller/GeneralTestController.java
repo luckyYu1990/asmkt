@@ -23,6 +23,12 @@ public class GeneralTestController {
     }
 
     @ApiOperation("get url")
+    @PostMapping("get-url/concurrent/{thread}/{loop}")
+    public TestResult testConcurrentLoopGet(@PathVariable("thread") Long thread, @PathVariable("loop") Long loop, @RequestBody UrlAccessParam accessParam) {
+        return generalTestService.testGetConcurrentLoop(thread, loop, accessParam.getUrl(), accessParam.getJsonParamString());
+    }
+
+    @ApiOperation("get url")
     @PostMapping("get-url/concurrent")
     public TestResult testConcurrentGetUrls(@RequestBody List<String> urls) {
         return generalTestService.testGetConcurrent(urls);

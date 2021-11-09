@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.service.GeneralService;
+import com.google.common.base.Supplier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,4 +69,38 @@ public class AsmktGeneralTestService {
             log.error("exec tasks failed", e);
         }
     }
+
+    public TestResult testGetConcurrentLoop(Long thread, Long loop, String url, String jsonParamString) {
+        final TestResult result = new TestResult();
+        List<Callable<TestResponse>> tasks = new ArrayList<>();
+        for (int i = 0; i < loop; i++) {
+            for (int j = 0; j < thread; j++){
+                tasks.add(() -> generalService.get(url, jsonParamString));
+            }
+            //execute(tasks, testResult);
+            try {
+                List<Future<TestResponse>> futures = executorService.invokeAll(tasks);
+                List<TestResponse> responses = new ArrayList<>();
+                for (Future<TestResponse> future: futures) {
+                    TestResponse res = future.get();
+                    responses.add(res);
+                }
+                result.setResults(responses);
+                result.setTotal(responses.size());
+            } catch (Exception e) {
+                log.error("exec tasks failed", e);
+            }
+        }
+        /*loopRequest(loop, () -> generalService.get(url, jsonParamString));
+        Supplier<TestResponse> testResponseSupplier = () -> generalService.get(url, jsonParamString);*/
+        return result;
+    }
+
+    /*private void loopRequest(Long loop, Long thread, Supplier<TestResponse> e) {
+        for (int i = 0; i <loop; i++) {
+            for (int j = 0; j < thread; j++) {
+
+            }
+        }
+    }*/
 }

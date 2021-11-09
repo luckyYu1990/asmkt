@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -87,5 +88,18 @@ public class MyTest {
         }
         System.out.println(Instant.now());
 
+    }
+
+    @Test
+    public void testTimestamp() {
+        Long l = System.currentTimeMillis();
+        System.out.println(l);
+        System.out.println(l.toString().length());
+        Date date = new Date();
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now.getYear());
+        System.out.println(now.getMonth().getValue());
+        System.out.println(now.getDayOfMonth());
+        //System.out.println(StringBuildernow.getHour() + now.getMinute());
     }
 }
