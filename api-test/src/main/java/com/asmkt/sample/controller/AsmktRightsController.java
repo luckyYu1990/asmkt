@@ -1,0 +1,30 @@
+package com.asmkt.sample.controller;
+
+import com.asmkt.sample.domain.TestResult;
+import com.asmkt.sample.test.AsmktRightsTestService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 快营销权益
+ */
+@RestController
+@RequestMapping("asmkt")
+public class AsmktRightsController {
+
+    @Autowired
+    private AsmktRightsTestService rightsService;
+
+    @ApiOperation("get coupon")
+    @GetMapping("coupon/{thread}")
+    public TestResult getCoupon(@PathVariable("thread") Integer thread) {
+        return rightsService.testGetCoupon(thread);
+    }
+
+    @ApiOperation("")
+    @PostMapping("third-login")
+    public TestResult login(@PathVariable("thread") Integer thread) {
+        return rightsService.thirdLogin(thread);
+    }
+}

@@ -1,38 +1,31 @@
 package com.asmkt.sample.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.asmkt.sample.constant.enums.PresentQueryResultEnum;
 import com.asmkt.sample.domain.Condition;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
-import com.asmkt.sample.service.AsmktIDBCouponService;
+import com.asmkt.sample.service.AsmktRightsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-/**
- * 兴业银行
- */
 @Service
-public class AsmktIDBCouponTestService extends BaseTestService{
+public class AsmktRightsTestService extends BaseTestService {
 
     @Autowired
-    private AsmktIDBCouponService couponService;
+    private AsmktRightsService rightsService;
 
-    public TestResult createCouponConcurrent(Integer thread) {
-        final TestResult result = new TestResult();
+    public TestResult testGetCoupon(Integer thread) {
+        TestResult result = new TestResult();
         List<Callable<TestResponse>> tasks = new ArrayList<>();
         for (int i = 0; i < thread; i++) {
-            tasks.add(() -> couponService.createCoupon());
+            tasks.add(() -> rightsService.getCoupon());
         }
         execute(tasks, result);
-        Condition condition = Condition.builder().build();
-       //          .expectCostTime(300L).build();
-        analysisResponse(result, condition);
+        analysisResponse(result, getEmptyCondition());
         return result;
     }
 
@@ -71,36 +64,15 @@ public class AsmktIDBCouponTestService extends BaseTestService{
         getRate(result, success, total);
     }
 
-  /*  private void getRate(TestResult result, double success, Integer total) {
-        double rate = success / total;
-        BigDecimal bd = new BigDecimal(rate);
-        double formatRate = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        result.setSuccessRate(formatRate * 100);
-    }*/
 
-    public TestResult queryCouponConcurrent(Integer thread) {
-        final TestResult result = new TestResult();
+    public TestResult thirdLogin(Integer thread) {
+        TestResult result = new TestResult();
         List<Callable<TestResponse>> tasks = new ArrayList<>();
         for (int i = 0; i < thread; i++) {
-            tasks.add(() -> couponService.queryCoupon());
+            tasks.add(() -> rightsService.thirdLogin());
         }
         execute(tasks, result);
-        Condition condition = Condition.builder().build();
-        //          .expectCostTime(300L).build();
-        analysisResponse(result, condition);
-        return result;
-    }
-
-    public TestResult cancelCouponConcurrent(Integer thread) {
-        final TestResult result = new TestResult();
-        List<Callable<TestResponse>> tasks = new ArrayList<>();
-        for (int i = 0;i < thread; i ++) {
-            tasks.add(() -> couponService.cancelCoupon());
-        }
-        execute(tasks, result);
-        Condition condition = Condition.builder().build();
-        //          .expectCostTime(300L).build();
-        analysisResponse(result, condition);
+        analysisResponse(result, getEmptyCondition());
         return result;
     }
 }

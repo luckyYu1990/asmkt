@@ -1,10 +1,12 @@
 package com.asmkt.sample.test;
 
+import com.asmkt.sample.domain.Condition;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,6 +33,17 @@ public class BaseTestService {
         } catch (Exception e) {
             log.error("exec tasks failed", e);
         }
+    }
+
+    void getRate(TestResult result, double success, Integer total) {
+        double rate = success / total;
+        BigDecimal bd = new BigDecimal(rate);
+        double formatRate = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        result.setSuccessRate(formatRate * 100);
+    }
+
+    Condition getEmptyCondition() {
+        return Condition.builder().build();
     }
 
 }
