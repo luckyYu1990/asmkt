@@ -5,18 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.validation.constraints.NotNull;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.KeySpec;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Slf4j
@@ -62,11 +56,8 @@ public class AESUtils {
 
     private static final String CHARSET_NAME = "UTF-8";
     private static final String AES_NAME = "AES";
-    private static String salt = "abcdefg";
     // 加密模式
     public static final String ALGORITHM = "AES/CBC/PKCS7Padding";
-    // 偏移量
-    public static final byte[] IV = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -82,9 +73,6 @@ public class AESUtils {
         byte[] result = null;
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec keySpec = new SecretKeySpec(getAesKey(secretKey.getBytes(StandardCharsets.UTF_8)), AES_NAME);
             AlgorithmParameterSpec paramSpec = new IvParameterSpec("0000000000000000".getBytes(CHARSET_NAME));
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, paramSpec);
@@ -104,12 +92,9 @@ public class AESUtils {
      */
     public static String decrypt(@NotNull String content, String secretKey) {
         try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
+            Cipher cipher = Cipher.getInstance(ALGORITHM, "BC");
             SecretKeySpec keySpec = new SecretKeySpec(getAesKey(secretKey.getBytes(StandardCharsets.UTF_8)), AES_NAME);
-            AlgorithmParameterSpec paramSpec = new IvParameterSpec(IV);
+            AlgorithmParameterSpec paramSpec = new IvParameterSpec("0000000000000000".getBytes(CHARSET_NAME));
             cipher.init(Cipher.DECRYPT_MODE, keySpec, paramSpec);
             return new String(cipher.doFinal(Base64.getDecoder().decode(content)), CHARSET_NAME);
         } catch (Exception e) {
