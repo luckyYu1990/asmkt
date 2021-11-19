@@ -42,6 +42,12 @@ public class BaseTestService {
         result.setSuccessRate(formatRate * 100);
     }
 
+    double getValueRetain2DecimalPlaces(double numerator , double denominator) {
+        double rate = numerator / denominator;
+        BigDecimal bd = new BigDecimal(rate);
+        return bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
     Condition getEmptyCondition() {
         return Condition.builder().build();
     }

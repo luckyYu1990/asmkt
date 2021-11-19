@@ -15,6 +15,8 @@ public class TestResult {
     private Integer failedTotal;
     @Excel(name = "成功比例", width = 30, needMerge = true)
     private Double successRate;
+    @Excel(name = "平均响应", width = 30, needMerge = true)
+    private Double averageCost;
     @Excel(name = "结果", width = 30, needMerge = true)
     private List<TestResponse> results;
 }

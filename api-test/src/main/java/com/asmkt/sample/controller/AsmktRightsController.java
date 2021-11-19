@@ -22,8 +22,8 @@ public class AsmktRightsController {
         return rightsService.testGetCoupon(thread);
     }
 
-    @ApiOperation("")
-    @PostMapping("third-login")
+    @ApiOperation("third login")
+    @PostMapping("third-login/{thread}")
     public TestResult login(@PathVariable("thread") Integer thread) {
         return rightsService.thirdLogin(thread);
     }

@@ -32,12 +32,17 @@ public class AsmktRightsTestService extends BaseTestService {
     private void analysisResponse(TestResult result, Condition condition) {
         List<TestResponse> results = result.getResults();
         int success = 0;
+        Long totalResCost = 0L;
+        Long totalResSuc = 0L;
         for (TestResponse res : results) {
             Integer resultCode;
             JSONObject jsonObj = null;
             boolean pass = true;
             if (res.getCode() != 200) {
                 pass = false;
+            } else {
+                totalResCost = totalResCost + res.getResponseCostValue();
+                totalResSuc++;
             }
             if (condition.isCheckResultCode()) {
                 resultCode = jsonObj.getInteger(condition.getResultKeyName());
@@ -62,6 +67,7 @@ public class AsmktRightsTestService extends BaseTestService {
         Integer total = result.getTotal();
         result.setFailedTotal(total - success);
         getRate(result, success, total);
+        result.setAverageCost(getValueRetain2DecimalPlaces(totalResCost, totalResSuc));
     }
 
 

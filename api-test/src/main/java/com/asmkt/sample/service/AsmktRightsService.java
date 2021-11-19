@@ -10,10 +10,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -28,7 +27,7 @@ public class AsmktRightsService {
         String url = "http://testkyxapi.kliwu.com/GiftCoupon";
         String appId = "8d4cddce-36be-4d2b-f822-08d98d2b8c14";
         String activityId = "2f241f77-91a1-418d-a8c4-2dfbd403eff4";
-        String productId = "123";
+        String productId = "";
         Integer quantity = 1;
         String phoneNo = "13800138000";
         String businessNo = RandomStringUtils.randomAlphanumeric(18);
@@ -43,8 +42,7 @@ public class AsmktRightsService {
         param.put("BusinessNo", businessNo);
         param.put("ExpirationDate", expirationDate);
         param.put("Timestamp", timeStamp);
-        //param.put("UserIdentity", "13800138000");
-        String sign = getSign(param);
+        String sign = getCouponSign(param);
         param.put("Sign", sign);
         String data = AESUtils.encrypt(param.toJSONString(), secretKey);
         String urlData = getUrlEncodeData(data);
@@ -80,35 +78,21 @@ public class AsmktRightsService {
         return new StopWatch(watchName);
     }
 
-    private String getSign(JSONObject param) {
-        Map<String, Object> signMap = new LinkedHashMap<>(param.size());
-        /*param.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                .forEachOrdered(e -> signMap.put(e.getKey().toLowerCase(), e.getValue()));*/
-        signMap.put("appid", param.get("AppId"));
-        signMap.put("activityid", param.get("ActivityId"));
-        signMap.put("productid", param.get("ProductId"));
-        signMap.put("quantity", param.get("Quantity"));
-        signMap.put("phoneno", param.get("PhoneNo"));
-        signMap.put("businessno", param.get("BusinessNo"));
-        signMap.put("expirationdate", param.get("ExpirationDate"));
-        signMap.put("timestamp", param.get("Timestamp"));
-        //signMap.put("useridentity", param.get("UserIdentity"));
-        //signMap.remove("expirationdate");
-        signMap.put("secretkey", secretKey);
-        StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, Object> entry : signMap.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            builder.append(key).append("=").append(value).append("&");
-        }
-        String result = builder.toString();
-        result = result.substring(0, result.length() - 1);
+    private String getCouponSign(JSONObject param) {
+        String result = "appid=" + param.get("AppId") + '&' +
+                "activityid=" + param.get("ActivityId") + '&' +
+                "productid=" + param.get("ProductId") + '&' +
+                "quantity=" + param.get("Quantity") + '&' +
+                "phoneno=" + param.get("PhoneNo") + '&' +
+                "businessno=" + param.get("BusinessNo") + '&' +
+                "timestamp=" + param.get("Timestamp") + '&' +
+                "secretkey=" + secretKey;
         return MD5Utils.getMD5Str(result).toUpperCase();
     }
 
     public TestResponse thirdLogin() {
         log.info("third login======================>");
-        String url = "http://testkyx.kliwu.com/ThirdLogin";
+        String url = "http://testkyxapi.kliwu.com/ThirdLogin";
         String appId = "8d4cddce-36be-4d2b-f822-08d98d2b8c14";
         String activityId = "2f241f77-91a1-418d-a8c4-2dfbd403eff4";
         String userIdentity = "13800138000";
@@ -124,11 +108,29 @@ public class AsmktRightsService {
         params.put("LotteryNumber", lotteryNumber);
         params.put("ProductId", productId);
         params.put("Timestamp", timestamp);
-        String sign = getSign(params);
+        String sign = getLoginSign(params);
         params.put("Sign", sign);
+        params.put("Extend1", "");
+        params.put("Extend2", "");
+        params.put("Extend3", "");
         String data = AESUtils.encrypt(params.toJSONString(), secretKey);
         String urlData = getUrlEncodeData(data);
         url = url + "?appId=" + appId + "&data=" + urlData;
         return doGetTestUrl(url);
+    }
+
+    private String getLoginSign(JSONObject param) {
+        String result = "appid=" + param.get("AppId") + '&' +
+                "activityid=" + param.get("ActivityId") + '&' +
+                "useridentity=" + param.get("UserIdentity") + '&' +
+                "lotteryidentification=" + param.get("LotteryIdentification") + '&' +
+                "lotterynumber=" + param.get("LotteryNumber") + '&' +
+                "productid=" + param.get("ProductId") + '&' +
+                "extend1=&" +
+                "extend2=&" +
+                "extend3=&" +
+                "timestamp=" + param.get("Timestamp") + '&' +
+                "secretkey=" + secretKey;
+        return MD5Utils.getMD5Str(result).toUpperCase();
     }
 }

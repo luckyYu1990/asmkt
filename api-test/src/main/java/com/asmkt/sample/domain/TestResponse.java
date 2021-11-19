@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
@@ -51,5 +52,12 @@ public class TestResponse implements Serializable {
 
     public String toJsonString() {
         return JSONObject.toJSONString(this);
+    }
+
+    public String getResponseContent() {
+        if (StringUtils.isNotBlank(this.responseContent) && this.responseContent.length() > 1000) {
+            return responseContent.substring(0, 1000);
+        }
+        return this.responseContent;
     }
 }

@@ -35,12 +35,12 @@
 <!--			<version>${spring-native.version}</version>-->
 <!--		</dependency>-->
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -123,11 +123,11 @@
 			<version>${spring-cloud.feign}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-hystrix -->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 			<version>${spring-cloud.feign}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
@@ -156,25 +156,25 @@
 					</image>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.springframework.experimental</groupId>
-				<artifactId>spring-aot-maven-plugin</artifactId>
-				<version>${spring-native.version}</version>
-				<executions>
-					<execution>
-						<id>test-generate</id>
-						<goals>
-							<goal>test-generate</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>generate</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.experimental</groupId>-->
+<!--				<artifactId>spring-aot-maven-plugin</artifactId>-->
+<!--				<version>${spring-native.version}</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>test-generate</id>-->
+<!--						<goals>-->
+<!--							<goal>test-generate</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>generate</id>-->
+<!--						<goals>-->
+<!--							<goal>generate</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 	<repositories>
