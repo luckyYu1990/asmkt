@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+sa-token:
+  #token名称 ， 也是cookie名称
+  token-name: satoken
+  #有效期
+  timeout: 2592000
+  activity-timeout: -1
+  #是否允许同一时间账号并发登录
+  is-concurrent: true
+  #多人登录同一个账号时，是否共用一个token
+  is-share: false
+  #token风格
+  token-style: uuid
+  #是否输出操作日志
+  is-log: false
+
