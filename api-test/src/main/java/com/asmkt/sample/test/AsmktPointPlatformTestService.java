@@ -108,4 +108,18 @@ public class AsmktPointPlatformTestService extends BaseTestService{
         analysisResponse(result, condition);
         return result;
     }
+
+    public TestResult testRefundPointsUsers(PointsParamVo vo) {
+        final TestResult result = new TestResult();
+        List<String> userIds = vo.getUserIds();
+        List<Callable<TestResponse>> tasks = new ArrayList<>();
+        for (int i = 0; i < userIds.size(); i++) {
+            String userId = userIds.get(i);
+            tasks.add(() -> pointService.rechargePoints(vo, userId));
+        }
+        execute(tasks, result);
+        Condition condition = Condition.builder().build();
+        analysisResponse(result, condition);
+        return result;
+    }
 }

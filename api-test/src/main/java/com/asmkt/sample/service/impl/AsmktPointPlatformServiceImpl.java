@@ -72,4 +72,20 @@ public class AsmktPointPlatformServiceImpl  extends AsmktBaseService implements 
         return postWithParams(apiParams, url);
     }
 
+    @Override
+    public TestResponse rechargePoints(PointsParamVo vo, String userId) {
+        String url = "https://nudgbank.kliwu.com/point/addPoint";
+        JSONObject obj = new JSONObject();
+        obj.put("userId", userId);
+        obj.put("point", vo.getPoint());
+        obj.put("appId", vo.getAppId());
+        obj.put("reason", "recharge");
+        obj.put("expiredTime", vo.getExpiredTime());
+        obj.put("createTime", "2021-11-09 17:05:50");
+        obj.put("uniqueInfo", RandomStringUtils.randomAlphanumeric(10));
+        // obj.put("uniqueInfo", "1");
+        List<ApiParam> apiParams = ApiParam.withParamJson(obj);
+        return postJsonWithParams(apiParams, url);
+    }
+
 }

@@ -2,6 +2,8 @@ package com.asmkt.sample.controller.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PointsParamVo {
     private String userId;
@@ -9,4 +11,5 @@ public class PointsParamVo {
     private int appId;
     private String expiredTime;
     private String operationId;
+    private List<String> userIds;
 }

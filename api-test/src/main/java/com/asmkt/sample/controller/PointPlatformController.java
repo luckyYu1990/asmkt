@@ -37,4 +37,10 @@ public class PointPlatformController {
     public TestResult refundPoints(@PathVariable("thread") int thread, @RequestBody PointsParamVo vo) {
         return ppTestService.testRefundPoints(vo, thread);
     }
+
+    @ApiOperation("recharge users points")
+    @PostMapping("recharge/users")
+    public TestResult rechargePointsUsers(@RequestBody PointsParamVo vo) {
+        return ppTestService.testRefundPointsUsers(vo);
+    }
 }

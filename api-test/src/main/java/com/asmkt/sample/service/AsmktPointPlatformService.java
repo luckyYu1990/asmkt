@@ -11,4 +11,6 @@ public interface AsmktPointPlatformService {
     TestResponse consumePoints(PointsParamVo vo);
 
     TestResponse refundPoints(PointsParamVo vo);
+
+    TestResponse rechargePoints(PointsParamVo vo, String userId);
 }
