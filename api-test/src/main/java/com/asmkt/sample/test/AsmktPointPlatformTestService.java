@@ -122,4 +122,9 @@ public class AsmktPointPlatformTestService extends BaseTestService{
         analysisResponse(result, condition);
         return result;
     }
+
+    public TestResult getPoints(String userId) {
+
+        return null;
+    }
 }

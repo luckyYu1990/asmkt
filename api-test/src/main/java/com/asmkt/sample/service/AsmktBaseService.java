@@ -1,5 +1,6 @@
 package com.asmkt.sample.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.asmkt.sample.domain.ApiParam;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.httpclient.HttpApiService;
@@ -32,6 +33,17 @@ public class AsmktBaseService {
         StopWatch stopWatch = getStopWatch();
         stopWatch.start();
         TestResponse response = apiService.doPostJson(url, paramList);
+        stopWatch.stop();
+        response.setResponseCost(stopWatch.getTotalTimeMillis() + " millis");
+        response.setResponseCostValue(stopWatch.getTotalTimeMillis());
+        response.setResponseCostUnit("millis");
+        return response;
+    }
+
+    protected TestResponse postJsonArrayWithParams(JSONArray params, String url) {
+        StopWatch stopWatch = getStopWatch();
+        stopWatch.start();
+        TestResponse response = apiService.doPostJsonArray(url, params);
         stopWatch.stop();
         response.setResponseCost(stopWatch.getTotalTimeMillis() + " millis");
         response.setResponseCostValue(stopWatch.getTotalTimeMillis());

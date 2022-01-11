@@ -1,5 +1,6 @@
 package com.asmkt.sample.httpclient;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.asmkt.sample.domain.ApiParam;
 import com.asmkt.sample.domain.TestResponse;
@@ -110,6 +111,36 @@ public class HttpApiService {
             log.error("error to post {}", url, e);
             return TestResponse.error(e.getMessage());
         }
+    }
+
+    public TestResponse doPostJsonArray(String url, JSONArray params) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setConfig(requestConfig);
+        generatePostJsonArrayParam(params, httpPost);
+        try (CloseableHttpResponse response = this.httpClient.execute(httpPost)) {
+            if (response == null) {
+                return TestResponse.noResponse();
+            }
+            Integer code = getResponseCode(response);
+            String resultBody = getResultBody(response);
+            TestResponse.TestResponseBuilder resBuilder = TestResponse.builder();
+            resBuilder.code(code);
+            resBuilder.responseContent(resultBody);
+            return resBuilder.build();
+        } catch (Exception e) {
+            log.error("error to post {}", url, e);
+            return TestResponse.error(e.getMessage());
+        }
+    }
+
+    private void generatePostJsonArrayParam(JSONArray params, HttpPost httpPost) {
+        if (CollectionUtils.isEmpty(params)) {
+            return;
+        }
+        StringEntity entity = new StringEntity(params.toJSONString(), ContentType.APPLICATION_JSON);
+        entity.setContentEncoding("UTF-8");
+        entity.setContentType("application/json");
+        httpPost.setEntity(entity);
     }
 
     private void generatePostJsonParam(List<ApiParam> params, HttpPost httpPost) {

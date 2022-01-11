@@ -43,4 +43,9 @@ public class PointPlatformController {
     public TestResult rechargePointsUsers(@RequestBody PointsParamVo vo) {
         return ppTestService.testRefundPointsUsers(vo);
     }
+
+    @GetMapping("points")
+    public TestResult getPoints(String userId) {
+        return ppTestService.getPoints(userId);
+    }
 }

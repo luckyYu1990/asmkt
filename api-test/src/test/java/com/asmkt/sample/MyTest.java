@@ -3,6 +3,7 @@ package com.asmkt.sample;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.utils.AESUtils;
+import com.asmkt.sample.utils.MD5Utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -20,6 +21,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MyTest {
 
@@ -125,5 +128,21 @@ public class MyTest {
         System.out.println(bytes[0]);
         System.out.println(new String(bytes));
         System.out.println("=====" + new String(b2) + "^^^^^^^");
+    }
+
+    @Test
+    public void testMd5() {
+        long timestamp = System.currentTimeMillis();
+        System.out.println(timestamp);
+        String md5Str= "timestamp=" + timestamp + "&openid=&mobile=13800138000&key=";
+        String sign = MD5Utils.getMD5Str(md5Str).toUpperCase();
+        System.out.println(sign);
+        //String md5Str = "appId=111950457551001&clientid=624509192800130&openid=&mobile=13621632670&themeid=1068&timestamp=1624260387849&sign=838E734568302CB2F7D87A9C7A491DC1";
+    }
+
+    @Test
+    public void testStream() {
+        List<String> collect = Stream.of("1", "2").collect(Collectors.toList());
+        Stream.of("1", "2", "3", "4");
     }
 }
