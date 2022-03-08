@@ -25,4 +25,18 @@ public class AsmktVrOrderServiceImpl extends AsmktBaseService implements AsmktVr
         }
         return postJsonArrayWithParams(paramArray, url);
     }
+
+    @Override
+    public JSONArray getCreateOrderBatchParams(Integer num) {
+        JSONArray paramArray = new JSONArray();
+        for (int i = 0; i < num; i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("AppId", "522273113600002");
+            obj.put("ClientOrderId", RandomStringUtils.randomAlphanumeric(10));
+            obj.put("ProductCode", "115242413115936");
+            obj.put("AccountNo", "13800138001");
+            paramArray.add(obj);
+        }
+        return paramArray;
+    }
 }

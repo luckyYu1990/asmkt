@@ -1,5 +1,6 @@
 package com.asmkt.sample.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -57,11 +58,6 @@ public class AESUtils {
     private static final String CHARSET_NAME = "UTF-8";
     private static final String AES_NAME = "AES";
     // 加密模式
-    public static final String ALGORITHM = "AES/CBC/PKCS7Padding";
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-
     /**
      * 加密
      *
@@ -81,6 +77,11 @@ public class AESUtils {
             log.error("encrypt", e);
         }
         return Base64.getEncoder().encodeToString(result);
+    }
+    public static final String ALGORITHM = "AES/CBC/PKCS7Padding";
+
+    static {
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     /**
@@ -114,5 +115,17 @@ public class AESUtils {
             }
         }
         return newArray;
+    }
+
+    public static void main(String[] args) {
+        String a = encrypt("123", "e7972b9937a64f1d8d901a43548431d9");
+        System.out.println(a);
+
+       // String jsonStr = "{\"ActivityId\":\"2d1c1d2a-a1a7-4126-17dc-08d9defec6e1\",\"AppId\":\"32247cb6-a0cb-461c-502f-08d9dfa3462c\",\"Extend1\":\"\",\"Extend2\":\"\",\"Extend3\":\"\",\"LotteryIdentification\":\"20220125162137\",\"LotteryNumber\":\"2\",\"ProductId\":\"\",\"Sign\":\"A6977C7DCDB18AB25B9DD89A6471815C\",\"Timestamp\":\"1549960414\",\"UserIdentity\":\"13109873611\"}";
+        JSONObject jsonObject = JSONObject.parseObject("{\"ActivityId\":\"2d1c1d2a-a1a7-4126-17dc-08d9defec6e1\",\"AppId\":\"32247cb6-a0cb-461c-502f-08d9dfa3462c\",\"Extend1\":\"\",\"Extend2\":\"\",\"Extend3\":\"\",\"LotteryIdentification\":\"20220125162137\",\"LotteryNumber\":\"2\",\"ProductId\":\"\",\"Sign\":\"A6977C7DCDB18AB25B9DD89A6471815C\",\"Timestamp\":\"1549960414\",\"UserIdentity\":\"13109873611\"}");
+        String s = jsonObject.toJSONString();
+        System.out.println(s);
+        String s1 = encrypt(s, "e7972b9937a64f1d8d901a43548431d9");
+        System.out.println(s1);
     }
 }

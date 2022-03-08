@@ -1,5 +1,6 @@
 package com.asmkt.sample.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.asmkt.sample.constant.AsmktPresentConstant;
 import com.asmkt.sample.domain.ApiParam;
@@ -108,6 +109,80 @@ public class AsmktPresentServiceImpl implements AsmktPresentService {
         TestResponse response = postJsonWithParams(paramList);
         getResponseReturnData(response);
         return response;
+    }
+
+    @Override
+    public String getQueryOrderParam() {
+        log.info("===========================query order=====================================");
+        Map<String, String> params = getPublicParams();
+        params.put("Method", "Asmkt.OpenApi.Order.Query");
+        JSONObject json = new JSONObject();
+        Long coi = AsmktPresentConstant.CLIENT_ORDER_ID;
+        json.put("ClientOrderId", coi);
+        getParamRequestData(params, json);
+        String sign = generateSign(params);
+        params.put("Sign", sign);
+        JSONObject obj = new JSONObject();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            obj.put(entry.getKey(), entry.getValue());
+        }
+        return obj.toJSONString();
+    }
+
+    @Override
+    public String getProductListParam() {
+        log.info("===========================product list=====================================");
+        Map<String, String> params = getPublicParams();
+        params.put("Method", "Asmkt.OpenApi.Product.List");
+        JSONObject json = new JSONObject();
+        json.put("ActivityId", "123");
+        getParamRequestData(params, json);
+        String sign = generateSign(params);
+        params.put("Sign", sign);
+        JSONObject obj = new JSONObject();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            obj.put(entry.getKey(), entry.getValue());
+        }
+        return obj.toJSONString();
+    }
+
+    @Override
+    public String getQueryBalanceParam() {
+        log.info("===========================query balance=====================================");
+        Map<String, String> params = getPublicParams();
+        params.put("Method", "Asmkt.OpenApi.Balance.Query");
+        JSONObject json = new JSONObject();
+        json.put("AccountId", "643372152700002");
+        getParamRequestData(params, json);
+        String sign = generateSign(params);
+        params.put("Sign", sign);
+        JSONObject obj = new JSONObject();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            obj.put(entry.getKey(), entry.getValue());
+        }
+        return obj.toJSONString();
+    }
+
+    @Override
+    public String getCreateOrderParam() {
+        log.info("===========================create order=====================================");
+        Map<String, String> params = getPublicParams();
+        params.put("Method", "Asmkt.OpenApi.Order.Create");
+        JSONObject json = new JSONObject();
+        Long pCode =  AsmktPresentConstant.GOOD_ID;
+        json.put("ProductCode", pCode);
+        String randomOrderId =  RandomStringUtils.randomNumeric(20);
+        json.put("ClientOrderId", randomOrderId);
+        json.put("AccountNo", "111112");
+        json.put("CallbackUrl", "");
+        getParamRequestData(params, json);
+        String sign = generateSign(params);
+        params.put("Sign", sign);
+        JSONObject obj = new JSONObject();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            obj.put(entry.getKey(), entry.getValue());
+        }
+        return obj.toJSONString();
     }
 
     private void getParamRequestData(Map<String, String> params, JSONObject json) {

@@ -13,4 +13,12 @@ public interface AsmktPresentService {
     TestResponse createOrderError();
 
     TestResponse queryOrder(Long clientOrderId);
+
+    String getCreateOrderParam();
+
+    String getQueryOrderParam();
+
+    String getProductListParam();
+
+    String getQueryBalanceParam();
 }

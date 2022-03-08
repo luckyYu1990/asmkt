@@ -11,6 +11,7 @@ import com.asmkt.sample.domain.Condition;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.service.AsmktPresentService;
+import com.asmkt.sample.utils.CsvUtils;
 import com.asmkt.sample.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -301,5 +305,51 @@ public class AsmktPresentTestService {
             log.error("导出到文件失败", e);
         }
         return result;
+    }
+
+    public void generateCreateParamCsvFile(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            String jsonParam = presentService.getCreateOrderParam();
+            params.add(new String[]{jsonParam});
+        }
+        //String path = "D:\\asmkt\\mywork\\params.csv";
+        writeCsv(filePath, params);
+    }
+
+    public void generateQueryParamCsvFile(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            String jsonParam = presentService.getQueryOrderParam();
+            params.add(new String[]{jsonParam});
+        }
+        writeCsv(filePath, params);
+    }
+
+    private void writeCsv(String filePath, List<String[]> params) {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CsvUtils.writeCsvFile(filePath, null, params);
+    }
+
+    public void createProductListParamsFile(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            String jsonParam = presentService.getProductListParam();
+            params.add(new String[]{jsonParam});
+        }
+        writeCsv(filePath, params);
+    }
+
+    public void createQueryBalanceParamsFile(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            String jsonParam = presentService.getQueryBalanceParam();
+            params.add(new String[]{jsonParam});
+        }
+        writeCsv(filePath, params);
     }
 }

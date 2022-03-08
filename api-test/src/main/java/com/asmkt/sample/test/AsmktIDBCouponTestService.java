@@ -6,10 +6,14 @@ import com.asmkt.sample.domain.Condition;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.service.AsmktIDBCouponService;
+import com.asmkt.sample.utils.CsvUtils;
+import com.sun.org.apache.xpath.internal.res.XPATHMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -102,5 +106,40 @@ public class AsmktIDBCouponTestService extends BaseTestService{
         //          .expectCostTime(300L).build();
         analysisResponse(result, condition);
         return result;
+    }
+
+    public void generateCreateCouponParamCsv(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            JSONObject param = couponService.getCreateCouponParams();
+            params.add(new String[]{
+                    param.getString("store_id"), param.getString("encode_params"), param.getString("req_code"),
+                    param.getString("pos_id"), param.getString("mem_id"), param.getString("verify_sign"),
+                    param.getString("req_serial_no"), param.getString("timestamp"), param.getString("data")
+            });
+        }
+        writeCsv(filePath, params);
+    }
+
+    private void writeCsv(String filePath, List<String[]> params) {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CsvUtils.writeCsvFile(filePath, null, params);
+    }
+
+    public void generateQueryCouponParamCsv(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            JSONObject param = couponService.getQueryCouponParams();
+            params.add(new String[]{
+                    param.getString("store_id"), param.getString("encode_params"), param.getString("req_code"),
+                    param.getString("mem_id"), param.getString("verify_sign"),
+                    param.getString("timestamp"), param.getString("data")
+            });
+        }
+        writeCsv(filePath, params);
     }
 }

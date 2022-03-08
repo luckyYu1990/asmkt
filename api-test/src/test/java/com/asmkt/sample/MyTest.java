@@ -3,24 +3,24 @@ package com.asmkt.sample;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.utils.AESUtils;
+import com.asmkt.sample.utils.CsvUtils;
 import com.asmkt.sample.utils.MD5Utils;
+import com.google.common.base.Supplier;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.security.sasl.SaslServer;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -144,5 +144,132 @@ public class MyTest {
     public void testStream() {
         List<String> collect = Stream.of("1", "2").collect(Collectors.toList());
         Stream.of("1", "2", "3", "4");
+    }
+
+    @Test
+    public void testCsv() {
+        CsvUtils.readCsvFile("D:\\asmkt\\mywork\\data.csv");
+        String[] data = {"123", "456"};
+        String[] data2 = {"789", "101112"};
+        List<String[]> list = new ArrayList<>();
+        list.add(data);
+        list.add(data2);
+        CsvUtils.writeCsvFile("D:\\asmkt\\mywork\\data1.csv", null ,list);
+    }
+
+    @Test
+    public void testString2() {
+        String a = "123";
+        System.out.println(a == "123");
+        String b = new String("456");
+        System.out.println("456" == b);
+        String c = new String("567");
+        String d = new String("567");
+        System.out.println(c == d);
+    }
+
+    @Test
+    public void maoPao() {
+        int[] arr = {1, 3, 2, 5, 4, -1};
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j + 1];
+                    arr[j + 1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        for (int a : arr) {
+            System.out.println(a);
+        }
+    }
+
+    /**
+     * 严蔚敏版《数据结构》中对选择排序的基本思想描述为：
+     * 每一趟在n-i+1(i=1,2,...,n-1)个记录中选取关键字最小的记录作为有序序列中第i个记录。
+     * 具体来说，假设长度为n的数组arr，要按照从小到大排序，那么先从n个数字中找到最小值min1，如果最小值min1的位置不在数组的最左端(也就是min1不等于arr[0])，
+     * 则将最小值min1和arr[0]交换，接着在剩下的n-1个数字中找到最小值min2，如果最小值min2不等于arr[1]，则交换这两个数字，依次类推，直到数组arr有序排列。算法的时间复杂度为O(n^2)。
+     * ————————————————
+     * 版权声明：本文为CSDN博主「ispurs」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+     * 原文链接：https://blog.csdn.net/liang_gu/article/details/80627548
+     */
+    @Test
+    public void xuanze() {
+        int[] arr = {1, 3, 2, 5, 4, -1};
+        int len = arr.length;
+        int index,temp;
+        for (int i = 0; i < len; i++) {
+            index = i; //min index
+            for (int j = i + 1; j < len; j ++) {
+                if (arr[j] < arr[index]) {
+                    index = j; //找到最小的那个索引
+                }
+                if (index != i) {
+                    temp = arr[i];
+                    arr[i] = arr[index];
+                    arr[index] = temp;
+                }
+            }
+        }
+        for (int a : arr) {
+            System.out.println(a);
+        }
+    }
+
+    Lock lock = new ReentrantLock(); //可重入锁
+    public void lock() {
+        lock.lock();
+        try {
+            System.out.println("get the lock");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+            System.out.println("release the lock");
+        }
+    }
+
+    @Test
+    public void testLock() {
+       /* Runnable run = this::lock;
+        Thread t = new Thread(run);
+        t.start();
+        run.run();
+        Runnable runnable = () -> {
+            System.out.println("");
+        };*/
+        for (int i = 0; i < 5; i++) {
+            Thread t = new Thread(this::lock);
+            t.start();
+        }
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testHashMap() {
+        Map<String, String> map = new ConcurrentHashMap<>();
+        map.put("a", "v");
+        Map<String, String> hashMap = new HashMap<>();
+    }
+
+    @Test
+    public void testYouYi() {
+        int a = 1 << 4;
+        // 0001
+        System.out.println(a);
+    }
+
+    @Test
+    public void testSql() {
+        String sql = "select a.name,b.no from A a left join B on a.id = b.id";
+        String sql2 = "select ";
+        int test = 1 ^ 2;
+        System.out.println(test);
     }
 }

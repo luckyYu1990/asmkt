@@ -55,6 +55,52 @@ public class AsmktIDBCouponServiceImpl implements AsmktIDBCouponService {
     }
 
     @Override
+    public JSONObject getCreateCouponParams() {
+        log.info("create coupon");
+        String url = "https://testkyxpre.kliwu.com/CIB/Home/CreateCoupon";
+        String reqCode = "voucher.create";
+        String storeId = "ZQD001";
+        String memId = "ZQD001";
+        String reqSerialNo = RandomStringUtils.randomAlphanumeric(32);
+        String encodeParams = getEncodeParams();
+        Long timestamp = System.currentTimeMillis();
+        String verifySign = getSign(storeId, memId, encodeParams, timestamp.toString());
+        String posId = RandomStringUtils.randomAlphanumeric(18);
+        JSONObject obj = new JSONObject();
+        obj.put("req_code", reqCode);
+        obj.put("store_id", storeId);
+        obj.put("mem_id", memId);
+        obj.put("req_serial_no", reqSerialNo);
+        obj.put("encode_params", encodeParams);
+        obj.put("timestamp", timestamp);
+        obj.put("verify_sign", verifySign);
+        obj.put("pos_id", posId);
+        obj.put("data", obj.toJSONString());
+        return obj;
+    }
+
+    @Override
+    public JSONObject getQueryCouponParams() {
+        log.info("query coupon");
+        String url = "https://testkyxpre.kliwu.com/CIB/Home/QueryCoupon";
+        String reqCode = "voucher.create";
+        String storeId = "ZQD001";
+        String memId = "ZQD001";
+        String encodeParams = getQueryEncodeParams();
+        Long timestamp = System.currentTimeMillis();
+        String verifySign = getSign(storeId, memId, encodeParams, timestamp.toString());
+        JSONObject obj = new JSONObject();
+        obj.put("req_code", reqCode);
+        obj.put("store_id", storeId);
+        obj.put("mem_id", memId);
+        obj.put("encode_params", encodeParams);
+        obj.put("timestamp", timestamp);
+        obj.put("verify_sign", verifySign);
+        obj.put("data", obj.toJSONString());
+        return obj;
+    }
+
+    @Override
     public TestResponse queryCoupon() {
         log.info("query coupon");
         String url = "https://testkyxpre.kliwu.com/CIB/Home/QueryCoupon";

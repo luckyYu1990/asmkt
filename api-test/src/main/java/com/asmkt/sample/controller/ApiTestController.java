@@ -8,10 +8,7 @@ import com.asmkt.sample.utils.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,6 +26,13 @@ public class ApiTestController {
     @GetMapping("create-order/normal")
     public TestResult testPresentNormalCreate() {
         return testService.testPresentCreateConcurrent(1);
+    }
+
+    @ApiOperation("")
+    @GetMapping("create-order/params/csv-file/{num}")
+    public String generateCreateOrderParam(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        testService.generateCreateParamCsvFile(num, filePath);
+        return "success";
     }
 
     @ApiOperation("create order out of stock")
@@ -74,6 +78,13 @@ public class ApiTestController {
         return testService.testPresentQueryConcurrent(thread);
     }
 
+    @ApiOperation("get query order csv")
+    @GetMapping("query-order/params/csv-file/{num}")
+    public String generateQueryParamCsv(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        testService.generateQueryParamCsvFile(num, filePath);
+        return "success";
+    }
+
     @ApiOperation("create order")
     @GetMapping("create-order/concurrent/{thread}")
     public TestResult testPresentConcurrentCreateApi(@PathVariable("thread") Integer thread) {
@@ -90,6 +101,18 @@ public class ApiTestController {
     @GetMapping("create-order/loop/{timeMinutes}")
     public TestResult testPresentLoopCreateApi(@PathVariable("timeMinutes") Long times) {
         return testService.testPresentCreateLoop(times);
+    }
+
+    @GetMapping("product-list/csv-file/{num}")
+    public String generateProductListParams(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        testService.createProductListParamsFile(num, filePath);
+        return "success";
+    }
+
+    @GetMapping("balance/csv-file/{num}")
+    public String generateQueryBalanceParams(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        testService.createQueryBalanceParamsFile(num, filePath);
+        return "success";
     }
 
     @ApiOperation("query result export")
@@ -116,3 +139,4 @@ public class ApiTestController {
         ExcelUtils.exportExcel(results, TestResponse.class, fileName, params, response);
     }
 }
+

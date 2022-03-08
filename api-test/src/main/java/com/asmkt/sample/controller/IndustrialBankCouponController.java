@@ -19,10 +19,24 @@ public class IndustrialBankCouponController {
         return couponTestService.createCouponConcurrent(thread);
     }
 
+    @ApiOperation("get create coupon csv file")
+    @GetMapping("create-coupon/csv-file/{num}")
+    public String generateCreateCouponParamCsv(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        couponTestService.generateCreateCouponParamCsv(num, filePath);
+        return "success";
+    }
+
     @ApiOperation("query coupon")
     @GetMapping("/concurrent/{thread}")
     public TestResult testQueryCoupon(@PathVariable(value = "thread") Integer thread) {
         return couponTestService.queryCouponConcurrent(thread);
+    }
+
+    @ApiOperation("query coupon csv")
+    @GetMapping("/query/csv-file/{num}")
+    public String generateQueryCouponParamCsv(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        couponTestService.generateQueryCouponParamCsv(num, filePath);
+        return "success";
     }
 
     @ApiOperation("cancel coupon")

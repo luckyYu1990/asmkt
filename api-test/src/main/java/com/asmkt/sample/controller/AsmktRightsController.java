@@ -22,9 +22,24 @@ public class AsmktRightsController {
         return rightsService.testGetCoupon(thread);
     }
 
+    @ApiOperation("get coupon csv file")
+    @GetMapping("coupon/csv-file/{num}")
+    public String getCouponParams(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        rightsService.getCouponParams(num, filePath);
+        return "success";
+    }
+
     @ApiOperation("third login")
     @PostMapping("third-login/{thread}")
     public TestResult login(@PathVariable("thread") Integer thread) {
         return rightsService.thirdLogin(thread);
+    }
+
+    @ApiOperation("third login param file")
+    @GetMapping("third-login/csv-file/{num}")
+    public String generateLoginParams(@PathVariable("num") Integer num, @RequestParam("filePath") String filePath) {
+        rightsService.getThirdLoginParams(num, filePath);
+        return "success";
+
     }
 }

@@ -5,9 +5,12 @@ import com.asmkt.sample.domain.Condition;
 import com.asmkt.sample.domain.TestResponse;
 import com.asmkt.sample.domain.TestResult;
 import com.asmkt.sample.service.AsmktRightsService;
+import com.asmkt.sample.utils.CsvUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -80,5 +83,32 @@ public class AsmktRightsTestService extends BaseTestService {
         execute(tasks, result);
         analysisResponse(result, getEmptyCondition());
         return result;
+    }
+
+    public void getCouponParams(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            JSONObject param = rightsService.getCouponParams();
+            params.add(new String[]{param.getString("appId"), param.getString("data")});
+        }
+        writeCsv(filePath, params);
+    }
+
+    private void writeCsv(String filePath, List<String[]> params) {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CsvUtils.writeCsvFile(filePath, null, params);
+    }
+
+    public void getThirdLoginParams(Integer num, String filePath) {
+        List<String[]> params = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            JSONObject param = rightsService.getThirdLoginParams();
+            params.add(new String[]{param.getString("appId"), param.getString("data")});
+        }
+        writeCsv(filePath, params);
     }
 }
